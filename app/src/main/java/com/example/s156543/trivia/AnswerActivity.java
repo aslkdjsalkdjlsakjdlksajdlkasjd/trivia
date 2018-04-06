@@ -2,21 +2,14 @@
 package com.example.s156543.trivia;
 
 import android.content.Context;
-import android.content.Intent;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +23,7 @@ public class AnswerActivity extends AppCompatActivity implements QuestionRequest
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_answer);
 
         //ListView QListView = findViewById(R.id.questionList);
         // QListView.setOnItemClickListener(new ListViewClickListener());
@@ -40,13 +33,15 @@ public class AnswerActivity extends AppCompatActivity implements QuestionRequest
 
     }
 
-
-//        }
-public void gotQuestions(JSONArray question) {
-
+public void gotQuestions(JSONObject question) {
 
     try {
-       q = new Question(question.getJSONArray(0).getJSONObject(0));
+
+        System.out.println("YO");
+
+       q = new Question(question);
+       System.out.println(q);
+
     } catch (JSONException e) {
         e.printStackTrace();
     }
@@ -71,7 +66,6 @@ public void writeAnswer(View view){
         finish();
     }
 }
-
 
 }
 

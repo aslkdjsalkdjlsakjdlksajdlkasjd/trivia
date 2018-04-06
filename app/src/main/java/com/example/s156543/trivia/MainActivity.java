@@ -47,18 +47,18 @@ public class MainActivity extends AppCompatActivity{
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
-                    Log.d("signed in","onAuthStateChanged:signed_in" + user.getUid());
-
-                } else{
-                    Log.d("signed in","onAuthStateChanged:signed_out");
-                }
-            }
-        };
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null){
+//                    Log.d("signed in","onAuthStateChanged:signed_in" + user.getUid());
+//
+//                } else{
+//                    Log.d("signed in","onAuthStateChanged:signed_out");
+//                }
+//            }
+//        };
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         database.setLogLevel(Logger.Level.DEBUG);
 
@@ -72,15 +72,15 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onStart(){
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+       // mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        if (mAuthListener != null){
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+//        if (mAuthListener != null){
+//            mAuth.removeAuthStateListener(mAuthListener);
+//        }
     }
     public void clickRandom(View view){
         Intent intent = new Intent(MainActivity.this, AnswerActivity.class);
@@ -105,25 +105,25 @@ public class MainActivity extends AppCompatActivity{
                     }
                 });
     }
-
-    public void login(View view){
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Signed in!", "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                        if(!task.isSuccessful()){
-                            Log.w("Sign in failed", "SignInWithEmail", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(MainActivity.this, "User Logged in" + email,
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }
+//
+//    public void login(View view){
+//
+//        mAuth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Log.d("Signed in!", "signInWithEmail:onComplete:" + task.isSuccessful());
+//
+//                        if(!task.isSuccessful()){
+//                            Log.w("Sign in failed", "SignInWithEmail", task.getException());
+//                            Toast.makeText(MainActivity.this, "Authentication failed",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }else{
+//                            Toast.makeText(MainActivity.this, "User Logged in" + email,
+//                                    Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }
+//                });
+//    }
 }

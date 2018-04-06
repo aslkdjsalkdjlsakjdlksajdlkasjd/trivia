@@ -13,6 +13,7 @@ import com.android.volley.Response;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 
@@ -21,7 +22,7 @@ import com.android.volley.toolbox.Volley;
  */
 
 public class QuestionRequest implements
-        Response.Listener<JSONObject>, Response.ErrorListener{
+        Response.Listener<JSONArray>, Response.ErrorListener{
 
     Context context;
     Callback callback;
@@ -40,37 +41,26 @@ public class QuestionRequest implements
 
 
     @Override
-    public void onResponse(JSONObject response) {
+    public void onResponse(JSONArray response) {
 
-        JSONArray a = null;
-        JSONObject o = null;
-        try {
-            a = response.getJSONArray("questions");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
+        JSONObject object;
+            try {
+                System.out.println("try in onresponse");
+                object = response.getJSONObject(0);
+                System.out.println(object);
 
-//        try {
-//            o = a.getJSONObject(0);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        ArrayList<Question> questions = new ArrayList<>();
-//
-//        for( int i = 0; i < a.length(); i++){
-//            try {
-//                questions.add(new Question(a.getJSONObject(i)));
-//            } catch (JSONException e) {
-//
-//            }
-//        }
-        callback.gotQuestions(a);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+
+        callback.gotQuestions(object);
     }
 
 
     public interface Callback {
-        void gotQuestions(JSONArray questions);
+        void gotQuestions(JSONObject questions);
         void gotQuestionsError(String message);
 
     }
@@ -78,9 +68,10 @@ public class QuestionRequest implements
     public void getQuestions(Callback activity){
         callback = activity;
         RequestQueue queue = Volley.newRequestQueue(context);
+
         String url = "http://jservice.io/api/random";
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, this, this);
-        queue.add(jsonObjectRequest);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, this, this);
+        queue.add(jsonArrayRequest);
     }
 }

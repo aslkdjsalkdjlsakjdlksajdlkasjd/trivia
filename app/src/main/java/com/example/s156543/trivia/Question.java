@@ -10,29 +10,28 @@ import java.util.Objects;
  * Created by s156543 on 18-3-2018.
  */
 
-public class Question implements Serializable{
+public class Question implements Serializable {
 
     String answer;
     String question;
     int value;
     long category_id;
-    String title;
-    int clues_count;
+    //String title;
+    //int clues_count;
 
     public Question(String answer, String question, int value,
-                    long category_id, String title, int clues_count) {
+                    long category_id) { //String title, int clues_count
         setAnswer(answer);
         setCategory_id(category_id);
-        setClues_count(clues_count);
+        //setClues_count(clues_count);
         setQuestion(question);
-        setTitle(title);
+        // setTitle(title);
         setValue(value);
     }
 
     public Question(JSONObject o) throws JSONException {
         this(o.getString("answer"), o.getString("question"),
-                o.getInt("value"), o.getLong("category_id"),
-                o.getString("title"), o.getInt("clues_count"));
+                o.getInt("value"), o.getLong("category_id")); //o.getString("title"), o.getInt("clues_count"
     }
 
     public void setAnswer(String answer) {
@@ -51,13 +50,13 @@ public class Question implements Serializable{
         this.category_id = category_id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
 
-    public void setClues_count(int clues_count) {
-        this.clues_count = clues_count;
-    }
+//    public void setClues_count(int clues_count) {
+//        this.clues_count = clues_count;
+//    }
 
     public String getAnswer() {
 
@@ -76,11 +75,12 @@ public class Question implements Serializable{
         return category_id;
     }
 
-    public String getTitle() {
-        return title;
-    }
+//    public String getTitle() {
+//        return title;
+//    }
 
-    public int getClues_count() {
-        return clues_count;
-    }
+//    public int getClues_count() {
+//        return clues_count;
+//    }
+//}
 }
