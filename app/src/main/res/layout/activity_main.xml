@@ -8,20 +8,12 @@
     tools:context="com.example.s156543.trivia.MainActivity">
 
     <Button
-        android:id="@+id/register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="register"
-        android:text="REGISTER"
-        android:textStyle="italic" />
-
-    <Button
-        android:id="@+id/login"
+        android:id="@+id/highscores"
         style="@android:style/Widget.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="login"
-        android:text="LOGIN"
+        android:onClick="highscores"
+        android:text="highscores"
         android:textColor="@android:color/black"
         android:textStyle="italic" />
 

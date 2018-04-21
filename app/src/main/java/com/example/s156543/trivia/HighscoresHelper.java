@@ -2,58 +2,73 @@ package com.example.s156543.trivia;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+// Connects to Firebase, and posts and retrieves the data from there
 public class HighscoresHelper extends AppCompatActivity implements
         Response.Listener<JSONArray>, Response.ErrorListener {
 
     Context context;
-    QuestionRequest.Callback callback;
-    DatabaseReference dbr;
+    Callback callback;
+    int value;
+    String name;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference dbr = database.getReference("scores");
 
+    public HighscoresHelper(Context c, Callback activity,
+                            String name, int value){
+        context = c;
+        callback = activity;
+        this.value = value;
+        this.name = name;
+        getHighscores();
+        postNewHighscore(name, value);
+    }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_highscores_helper);
-//    }
-    //context
-    //delegate
+    // Saves the incoming score to the database
+    public void postNewHighscore(String name, int score){
 
-    CategoriesRequest();
-    postNewHighscore();
-    public void getHighscores(final Score newScore){
+        if (name != null) {
+            DatabaseReference childRef = dbr.child(name);
+            childRef.setValue(score);
+        }
+    }
 
-        // Read from the database
-        dbr.addValueEventListener(new ValueEventListener() {
+    // Retrieve all score data ordered by value
+    public void getHighscores(){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("scores");
+
+        ref.orderByValue().addListenerForSingleValueEvent(
+                new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
+
+                // Retrieves all children under "scores",
+                // then iterates over them to retrieve their scores
                 ArrayList<Score> highscores = new ArrayList<>();
+                Iterable<DataSnapshot> users = dataSnapshot.getChildren();
 
-                highscores.add(newScore);
-                String value = dataSnapshot.getValue(String.class);
+                for(DataSnapshot u : users){
+                    String name = u.getKey();
+                    int scor = dataSnapshot.child(name).getValue(int.class);
+                    Score newScore = new Score(name, scor);
+                    highscores.add(newScore);
+                }
 
-                //Log.d(TAG, "Value is: " + value);
+                callback.gotHighscores(highscores);
             }
 
             @Override
@@ -62,28 +77,15 @@ public class HighscoresHelper extends AppCompatActivity implements
                 callback.gotHighscoresError(error.getMessage());
             }
         });
-
     }
-
-
-    public HighscoresHelper(Context c, DatabaseReference dbref, Callback activity){
-        context = c;
-        callback = c;
-        dbr = dbref;
-
-
-    }
-
-
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        callback.gotQuestionsError(error.getMessage());
+        callback.gotHighscoresError(error.getMessage());
     }
 
     @Override
     public void onResponse(JSONArray response) {
-
     }
 
     public interface Callback {
